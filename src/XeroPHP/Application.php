@@ -165,7 +165,23 @@ abstract class Application
         }
         return null;
     }
+    public function downloadInvoicePdf($guid)
+	{
+		$class = $this->validateModelClass('Accounting\\Invoice');
 
+        $uri = sprintf('%s/%s', $class::getResourceURI(), $guid);
+        $api = $class::getAPIStem();
+
+        $url = new URL($this, $uri, $api);
+        $request = new Request($this, $url, Request::METHOD_GET);
+		
+		
+		$request->setHeader('Accept','application/pdf');
+		
+        $request->send();
+		return $request->getResponse();	
+	}
+    
     /**
      * @param string $model
      * @return Query
